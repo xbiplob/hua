@@ -12,7 +12,6 @@
 </head>
 <body>
   <div class="container">
-    <!-- Auth Box -->
     <div id="auth-container" class="auth-container">
       <div class="auth-box">
         <h1>LiveGroup</h1>
@@ -23,7 +22,6 @@
       </div>
     </div>
 
-    <!-- Chat Box -->
     <div id="chat-container" class="chat-container hidden">
       <div class="chat-header">
         <div class="user-info">
@@ -36,18 +34,25 @@
       <div id="messages" class="messages"></div>
 
       <div class="message-input">
-        <input id="message-input" type="text" placeholder="Type your message..." />
-        <input id="file-input" type="file" hidden />
-        <button id="upload-btn" class="btn attach-btn"><i class="fas fa-paperclip"></i></button>
-        <button id="send-btn" class="btn send-btn"><i class="fas fa-paper-plane"></i></button>
+        <label for="file-upload" class="file-upload-icon">
+          <i class="fas fa-paperclip"></i>
+        </label>
+        <input type="file" id="file-upload" style="display: none" />
+
+        <input
+          id="message-input"
+          type="text"
+          placeholder="Type your message..."
+        />
+        <button id="send-btn" class="btn send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Notification Sound -->
   <audio id="notification-sound" src="notification.mp3" preload="auto"></audio>
 
-  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
