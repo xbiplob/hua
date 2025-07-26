@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveGroup - Real-time Group Chat</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+</head>
+<body>
+  <div class="container">
+    <!-- Auth Box -->
+    <div id="auth-container" class="auth-container">
+      <div class="auth-box">
+        <h1>LiveGroup</h1>
+        <p>Real-time group chat with audio/video calls</p>
+        <button id="google-login" class="btn google-btn">
+          <i class="fab fa-google"></i> Sign in with Google
+        </button>
+      </div>
+    </div>
+
+    <!-- Chat Box -->
+    <div id="chat-container" class="chat-container hidden">
+      <div class="chat-header">
+        <div class="user-info">
+          <img id="user-avatar" src="" alt="User Avatar" />
+          <span id="username"></span>
+        </div>
+        <button id="logout-btn" class="btn logout-btn">Logout</button>
+      </div>
+
+      <div id="messages" class="messages"></div>
+
+      <!-- Upload Section -->
+      <div class="upload-box">
+        <input type="file" id="fileInput" accept="image/*,video/*">
+        <button onclick="uploadToPixeldrain()" class="btn upload-btn">Upload File</button>
+      </div>
+
+      <div class="message-input">
+        <input
+          id="message-input"
+          type="text"
+          placeholder="Type your message..."
+        />
+        <button id="send-btn" class="btn send-btn">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Sound -->
+  <audio id="notification-sound" src="notification.mp3" preload="auto"></audio>
+
+  <!-- Firebase Setup -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
+    import {
+      getDatabase,
+      ref,
+      push,
+      onValue,
+      off,
+      set,
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+    import {
+      getAuth,
+      signInWithPopup,
+      GoogleAuthProvider,
+      signOut,
+      onAuthStateChanged,
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCgBh87HhgBJNDJyJNub3iuLVh62J3wDYw",
+      authDomain: "livecaht-b833d.firebaseapp.com",
+      databaseURL: "https://livecaht-b833d-default-rtdb.firebaseio.com",
+      projectId: "livecaht-b833d",
+      storageBucket: "livecaht-b833d.appspot.com",
+      messagingSenderId: "242190184147",
+      appId: "1:242190184147:web:906390e348ed7fea942e26",
+      measurementId: "G-N7DBQKRJ39",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    window.firebase = {
+      auth,
+      provider,
+      database,
+      ref,
+      push,
+      onValue,
+      off,
+      set,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged,
+    };
+  </script>
+
+  <!-- Pixeldrain Upload Logic -->
+  <script>
+    const PIXELDRAIN_API_KEY = "your_pixeldrain_api_key_here"; // Replace with your actual API key
+
+    async function uploadToPixeldrain() {
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
+      if (!file) return alert("Please select a file");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const resp = await fetch("https://pixeldrain.com/api/file", {
+        method: "PUT",
+        headers: {
+          Authorization: "Basic " + btoa(":" + PIXELDRAIN_API_KEY),
+        },
+        body: formData,
+      });
+
+      if (!resp.ok) {
+        alert("Upload failed");
+        return;
+      }
+
+      const result = await resp.json();
+      alert("✅ Upload successful: https://pixeldrain.com/u/" + result.id);
+    }
+  </script>
+
+  <!-- Chat Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
