@@ -35,21 +35,11 @@
 
       <div id="messages" class="messages"></div>
 
-      <!-- Upload Section -->
-      <div class="upload-box">
-        <input type="file" id="fileInput" accept="image/*,video/*">
-        <button onclick="uploadToPixeldrain()" class="btn upload-btn">Upload File</button>
-      </div>
-
       <div class="message-input">
-        <input
-          id="message-input"
-          type="text"
-          placeholder="Type your message..."
-        />
-        <button id="send-btn" class="btn send-btn">
-          <i class="fas fa-paper-plane"></i>
-        </button>
+        <input id="message-input" type="text" placeholder="Type your message..." />
+        <input id="file-input" type="file" hidden />
+        <button id="upload-btn" class="btn attach-btn"><i class="fas fa-paperclip"></i></button>
+        <button id="send-btn" class="btn send-btn"><i class="fas fa-paper-plane"></i></button>
       </div>
     </div>
   </div>
@@ -57,7 +47,7 @@
   <!-- Notification Sound -->
   <audio id="notification-sound" src="notification.mp3" preload="auto"></audio>
 
-  <!-- Firebase Setup -->
+  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-analytics.js";
@@ -109,37 +99,6 @@
     };
   </script>
 
-  <!-- Pixeldrain Upload Logic -->
-  <script>
-    const PIXELDRAIN_API_KEY = "your_pixeldrain_api_key_here"; // Replace with your actual API key
-
-    async function uploadToPixeldrain() {
-      const fileInput = document.getElementById("fileInput");
-      const file = fileInput.files[0];
-      if (!file) return alert("Please select a file");
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const resp = await fetch("https://pixeldrain.com/api/file", {
-        method: "PUT",
-        headers: {
-          Authorization: "Basic " + btoa(":" + PIXELDRAIN_API_KEY),
-        },
-        body: formData,
-      });
-
-      if (!resp.ok) {
-        alert("Upload failed");
-        return;
-      }
-
-      const result = await resp.json();
-      alert("✅ Upload successful: https://pixeldrain.com/u/" + result.id);
-    }
-  </script>
-
-  <!-- Chat Logic -->
   <script src="script.js"></script>
 </body>
 </html>
